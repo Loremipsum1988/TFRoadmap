@@ -15,7 +15,13 @@ q = Queue.Queue()
 timers = []
 
 class LoggerTimer(object):
+    '''This class provides a timer with a repeat interval functionality  '''
+    
     def __init__(self, interval, func):
+        ''' 
+        interval -- the repeat interval in ms
+        func -- the function which will be called
+        '''
         interval /= 1000 #for ms
         if interval < 0:
             interval = 0
@@ -25,22 +31,24 @@ class LoggerTimer(object):
         self.__t = Timer(self.__interval, self.__loop)
     
     def __loop(self):
+        '''Runs the <self.__func> function every <self.__interval> seconds'''
         #print "FUNC"
         self.__func()
         self.cancel()
         self.__t = Timer(self.__interval, self.__loop)
         self.start()
         
-    
     def start(self):
+        '''Starts the timer if <self.__interval> is not 0 otherwise the 
+           timer will be canceled 
+        '''
         if self.__interval == 0:
             self.cancel()
             return     
-        #print "START -> " + str(self.__interval)   
+        
         self.__t.start()
     
     def cancel(self):
-        #print "CANCEL"
         self.__t.cancel()
         
     def join(self):
